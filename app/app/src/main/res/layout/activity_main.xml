@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EAEEFF"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/voda"
+        android:layout_width="90dp"
+        android:layout_height="95dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/voda" />
+
+    <TextView
+        android:id="@+id/ruble_sign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="260dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/centurygothic_bold"
+        android:text="@string/rub_sym"
+        android:textColor="#232323"
+        android:textSize="34sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/voda_balance"
+        style="@null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="196dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/centurygothic_bold"
+        android:text="124"
+        android:textColor="#232323"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/back_button"
+        style="@null"
+        android:layout_width="127dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="220dp"
+        android:layout_marginTop="460dp"
+        android:background="@drawable/btn"
+        android:gravity="center"
+        android:onClick="updateVolgaBackInfo"
+        android:paddingBottom="7dp"
+        android:text="@string/refresh_sym"
+        android:textAppearance="@null"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/forthVehicle3"
+        android:layout_width="54dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="356dp"
+        android:background="@drawable/vehicle"
+        android:gravity="center"
+        android:text="-"
+        android:textColor="#FFFFFF"
+        android:textIsSelectable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/forthTime2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="304dp"
+        android:text="-"
+        android:textColor="#000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/forthVehicle2"
+        android:layout_width="54dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="304dp"
+        android:background="@drawable/vehicle"
+        android:gravity="center"
+        android:text="-"
+        android:textColor="#FFFFFF"
+        android:textIsSelectable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/backTime1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="528dp"
+        android:text="2 мин"
+        android:textColor="#000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/forthTime3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="356dp"
+        android:text="-"
+        android:textColor="#000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/backTime2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="576dp"
+        android:text="2 мин"
+        android:textColor="#000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/voda_button"
+        style="@null"
+        android:layout_width="169dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="84dp"
+        android:background="@drawable/btn"
+        android:onClick="updateVodaBalance"
+        android:paddingBottom="9dp"
+        android:text="@string/refresh_sym"
+        android:textAlignment="center"
+        android:textAppearance="@null"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/backVehicle2"
+        android:layout_width="54dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="568dp"
+        android:background="@drawable/vehicle"
+        android:gravity="center"
+        android:text="-"
+        android:textColor="#FFFFFF"
+        android:textIsSelectable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/forthTime1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="252dp"
+        android:text="-"
+        android:textColor="#000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/forthVehicle1"
+        android:layout_width="54dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="252dp"
+        android:background="@drawable/vehicle"
+        android:gravity="center"
+        android:text="-"
+        android:textColor="#FFFFFF"
+        android:textIsSelectable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="460dp"
+        android:fontFamily="@font/centurygothic"
+        android:text="Назад"
+        android:textAppearance="@null"
+        android:textColor="#232323"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/backTime3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="624dp"
+        android:text="2 мин"
+        android:textColor="#000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/forth_button"
+        style="@null"
+        android:layout_width="127dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="220dp"
+        android:layout_marginTop="192dp"
+        android:background="@drawable/btn"
+        android:gravity="center"
+        android:onClick="updateVolgaForthInfo"
+        android:paddingBottom="7dp"
+        android:text="@string/refresh_sym"
+        android:textAppearance="@null"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/backVehicle1"
+        android:layout_width="54dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="524dp"
+        android:background="@drawable/vehicle"
+        android:gravity="center"
+        android:text="-"
+        android:textColor="#FFFFFF"
+        android:textIsSelectable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/backVehicle3"
+        android:layout_width="54dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="616dp"
+        android:background="@drawable/vehicle"
+        android:gravity="center"
+        android:text="-"
+        android:textColor="#FFFFFF"
+        android:textIsSelectable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/forth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="192dp"
+        android:fontFamily="@font/centurygothic"
+        android:text="Туда"
+        android:textAppearance="@null"
+        android:textColor="#232323"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
