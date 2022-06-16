@@ -18,9 +18,12 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import voda24.DataParser;
 import volga.StationsInfoService;
@@ -180,68 +183,51 @@ public class MainActivity extends AppCompatActivity {
 
             final String API_URL = "https://api.merlin.tvercard.ru/api/client/v1/stations";
 
-            //piece of shit, need rewrite asap
+            List<ArrivalInfoResponse> forthStationsInfo = new ArrayList<>();
 
-            Request requestFirstForthStation = new Request.Builder()
-                    .url(String.format("%s/%s/routes", API_URL, "8182"))
-                    .get()
-                    .build();
+            for (String currentStation : FORTH_STATIONS_INFO_MAP.keySet()) {
+                Request requestForthStation = new Request.Builder()
+                        .url(String.format("%s/%s/routes", API_URL, currentStation))
+                        .get()
+                        .build();
 
-            client.newCall(requestFirstForthStation).enqueue(new Callback() {
-                @Override
-                public void onFailure(Request request, IOException e) {
+                try {
+                    Response response = client.newCall(requestForthStation).execute();
+
+                    forthStationsInfo.addAll(stationsInfoService.getInfo(response.body().string(), FORTH_STATIONS_INFO_MAP.get(currentStation)));
+
+                } catch (IOException e) {
                     forthTime1.setText("-");
                     forthVehicle1.setText("-");
 
                     forthTime2.setText("-");
                     forthVehicle2.setText("-");
-                }
 
-                @Override
-                public void onResponse(Response response) throws IOException {
-                    List<ArrivalInfoResponse> forthStationsInfo =
-                            stationsInfoService.getInfo(response.body().string(), FORTH_STATIONS_INFO_MAP.get("8182"));
-
-                    MainActivity.this.runOnUiThread(() -> {
-                        if (!forthStationsInfo.isEmpty()) {
-                            forthVehicle1.setText(forthStationsInfo.get(0).getBusNumber());
-                            forthTime1.setText(forthStationsInfo.get(0).getArrivalMinutes() == Long.MAX_VALUE ? "прибывает/очень далеко"
-                                    : (forthStationsInfo.get(0).getArrivalMinutes()) + " мин");
-
-                            forthVehicle2.setText(forthStationsInfo.get(1).getBusNumber());
-                            forthTime2.setText(forthStationsInfo.get(1).getArrivalMinutes() == Long.MAX_VALUE ? "прибывает/очень далеко"
-                                    : (forthStationsInfo.get(1).getArrivalMinutes()) + " мин");
-
-                        }
-                    });
-
-                }
-            });
-
-            Request requestSecondForthStation = new Request.Builder()
-                    .url(String.format("%s/%s/routes", API_URL, "8183"))
-                    .get()
-                    .build();
-
-            client.newCall(requestSecondForthStation).enqueue(new Callback() {
-                @Override
-                public void onFailure(Request request, IOException e) {
                     forthTime3.setText("-");
                     forthVehicle3.setText("-");
+
+                    return null;
                 }
 
-                @Override
-                public void onResponse(Response response) throws IOException {
-                    List<ArrivalInfoResponse> forthStationsInfo =
-                            stationsInfoService.getInfo(response.body().string(), FORTH_STATIONS_INFO_MAP.get("8183"));
+            }
 
-                    MainActivity.this.runOnUiThread(() -> {
-                        if (!forthStationsInfo.isEmpty()) {
-                            forthVehicle3.setText(forthStationsInfo.get(0).getBusNumber());
-                            forthTime3.setText(forthStationsInfo.get(0).getArrivalMinutes() == Long.MAX_VALUE ? "прибывает/очень далеко"
-                                    : (forthStationsInfo.get(0).getArrivalMinutes()) + " мин");
-                        }
-                    });
+            List<ArrivalInfoResponse> sortedForthStationsInfo = forthStationsInfo.stream()
+                    .sorted(Comparator.comparingLong(ArrivalInfoResponse::getArrivalMinutes)).collect(Collectors.toList());
+
+            MainActivity.this.runOnUiThread(() -> {
+
+                if (!forthStationsInfo.isEmpty()) {
+                    forthVehicle1.setText(sortedForthStationsInfo.get(0).getBusNumber());
+                    forthTime1.setText(sortedForthStationsInfo.get(0).getArrivalMinutes() == Long.MAX_VALUE ? "прибывает/очень далеко"
+                            : (sortedForthStationsInfo.get(0).getArrivalMinutes()) + " мин");
+
+                    forthVehicle2.setText(sortedForthStationsInfo.get(1).getBusNumber());
+                    forthTime2.setText(sortedForthStationsInfo.get(1).getArrivalMinutes() == Long.MAX_VALUE ? "прибывает/очень далеко"
+                            : (sortedForthStationsInfo.get(1).getArrivalMinutes()) + " мин");
+
+                    forthVehicle3.setText(sortedForthStationsInfo.get(2).getBusNumber());
+                    forthTime3.setText(sortedForthStationsInfo.get(2).getArrivalMinutes() == Long.MAX_VALUE ? "прибывает/очень далеко"
+                            : (sortedForthStationsInfo.get(2).getArrivalMinutes()) + " мин");
 
                 }
             });
@@ -258,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
         new VolgaBackUpdateAsyncTask().execute();
     }
 
-    class VodaUpdateAsyncTask extends AsyncTask<String, String , String> {
+    class VodaUpdateAsyncTask extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
