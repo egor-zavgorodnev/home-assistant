@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -25,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import home.assistant.model.BusInfo;
 import voda24.DataParser;
 import volga.StationsInfoService;
 import volga.model.ArrivalInfoResponse;
@@ -36,25 +39,11 @@ public class MainActivity extends AppCompatActivity {
 
     TextView vodaBalance;
 
-    TextView forthVehicle1;
-    TextView forthTime1;
-
-    TextView forthVehicle2;
-    TextView forthTime2;
-
-    TextView forthVehicle3;
-    TextView forthTime3;
-
-    TextView backVehicle1;
-    TextView backTime1;
-
-    TextView backVehicle2;
-    TextView backTime2;
-
-    TextView backVehicle3;
-    TextView backTime3;
+    Button forthButton;
+    Button backButton;
 
     @Override
+    @RequiresApi(api = Build.VERSION_CODES.R)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -62,23 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
         vodaBalance = findViewById(R.id.voda_balance);
 
-        forthVehicle1 = findViewById(R.id.forthVehicle1);
-        forthTime1 = findViewById(R.id.forthTime1);
-
-        forthVehicle2 = findViewById(R.id.forthVehicle2);
-        forthTime2 = findViewById(R.id.forthTime2);
-
-        forthVehicle3 = findViewById(R.id.forthVehicle3);
-        forthTime3 = findViewById(R.id.forthTime3);
-
-        backVehicle1 = findViewById(R.id.backVehicle1);
-        backTime1 = findViewById(R.id.backTime1);
-
-        backVehicle2 = findViewById(R.id.backVehicle2);
-        backTime2 = findViewById(R.id.backTime2);
-
-        backVehicle3 = findViewById(R.id.backVehicle3);
-        backTime3 = findViewById(R.id.backTime3);
+        forthButton = (Button) findViewById(R.id.forth_button);
+        backButton = (Button) findViewById(R.id.back_button);
 
     }
 
@@ -97,81 +71,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-    class VolgaBackUpdateAsyncTask extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            backTime1.setText("...");
-            backTime2.setText("...");
-            backTime3.setText("...");
-        }
-
-        @Override
-        @RequiresApi(api = Build.VERSION_CODES.R)
-        protected String doInBackground(String... strings) {
-            final Map<String, Set<String>> BACK_STATIONS_INFO_MAP = Map.of("7795", Set.of("208", "56", "7"));
-
-            StationsInfoService stationsInfoService = new StationsInfoService();
-
-            final String API_URL = "https://api.merlin.tvercard.ru/api/client/v1/stations";
-
-            //piece of shit, need rewrite asap
-
-            Request requestFirstBackStation = new Request.Builder()
-                    .url(String.format("%s/%s/routes", API_URL, "7795"))
-                    .get()
-                    .build();
-
-            client.newCall(requestFirstBackStation).enqueue(new Callback() {
-                @Override
-                public void onFailure(Request request, IOException e) {
-                    backTime1.setText("-");
-                    backVehicle1.setText("-");
-
-                    backTime2.setText("-");
-                    backVehicle2.setText("-");
-
-                    backTime3.setText("-");
-                    backVehicle3.setText("-");
-                }
-
-                @Override
-                public void onResponse(Response response) throws IOException {
-                    List<ArrivalInfoResponse> backStationsInfo =
-                            stationsInfoService.getInfo(response.body().string(), BACK_STATIONS_INFO_MAP.get("7795"));
-
-                    MainActivity.this.runOnUiThread(() -> {
-                        if (!backStationsInfo.isEmpty()) {
-                            backVehicle1.setText(backStationsInfo.get(0).getBusNumber());
-                            backTime1.setText(backStationsInfo.get(0).getArrivalMinutes() == Long.MAX_VALUE ? "прибывает/очень далеко"
-                                    : (backStationsInfo.get(0).getArrivalMinutes()) + " мин");
-
-                            backVehicle2.setText(backStationsInfo.get(1).getBusNumber());
-                            backTime2.setText(backStationsInfo.get(1).getArrivalMinutes() == Long.MAX_VALUE ? "прибывает/очень далеко"
-                                    : (backStationsInfo.get(1).getArrivalMinutes()) + " мин");
-
-                            backVehicle3.setText(backStationsInfo.get(2).getBusNumber());
-                            backTime3.setText(backStationsInfo.get(2).getArrivalMinutes() == Long.MAX_VALUE ? "прибывает/очень далеко"
-                                    : (backStationsInfo.get(2).getArrivalMinutes()) + " мин");
-
-                        }
-                    });
-
-                }
-            });
-
-            return null;
-        }
-    }
-
     class VolgaForthUpdateAsyncTask extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            forthTime1.setText("...");
-            forthTime2.setText("...");
-            forthTime3.setText("...");
+            forthButton.setText("...");
         }
 
         @Override
@@ -197,15 +101,7 @@ public class MainActivity extends AppCompatActivity {
                     forthStationsInfo.addAll(stationsInfoService.getInfo(response.body().string(), FORTH_STATIONS_INFO_MAP.get(currentStation)));
 
                 } catch (IOException e) {
-                    forthTime1.setText("-");
-                    forthVehicle1.setText("-");
-
-                    forthTime2.setText("-");
-                    forthVehicle2.setText("-");
-
-                    forthTime3.setText("-");
-                    forthVehicle3.setText("-");
-
+                    forthButton.setText("no internet");
                     return null;
                 }
 
@@ -216,21 +112,90 @@ public class MainActivity extends AppCompatActivity {
 
             MainActivity.this.runOnUiThread(() -> {
 
-                if (!forthStationsInfo.isEmpty()) {
-                    forthVehicle1.setText(sortedForthStationsInfo.get(0).getBusNumber());
-                    forthTime1.setText(sortedForthStationsInfo.get(0).getArrivalMinutes() == Long.MAX_VALUE ? "прибывает/очень далеко"
-                            : (sortedForthStationsInfo.get(0).getArrivalMinutes()) + " мин");
+                if (!sortedForthStationsInfo.isEmpty()) {
 
-                    forthVehicle2.setText(sortedForthStationsInfo.get(1).getBusNumber());
-                    forthTime2.setText(sortedForthStationsInfo.get(1).getArrivalMinutes() == Long.MAX_VALUE ? "прибывает/очень далеко"
-                            : (sortedForthStationsInfo.get(1).getArrivalMinutes()) + " мин");
+                    List<BusInfo> records = new ArrayList<>();
 
-                    forthVehicle3.setText(sortedForthStationsInfo.get(2).getBusNumber());
-                    forthTime3.setText(sortedForthStationsInfo.get(2).getArrivalMinutes() == Long.MAX_VALUE ? "прибывает/очень далеко"
-                            : (sortedForthStationsInfo.get(2).getArrivalMinutes()) + " мин");
+                    sortedForthStationsInfo.forEach(info -> records.add(
+                            new BusInfo(info.getBusNumber(),
+                                    info.getArrivalMinutes() == Long.MAX_VALUE ? "прибывает/очень далеко"
+                                            : (sortedForthStationsInfo.get(0).getArrivalMinutes()) + " мин")));
 
+                    ListView forthInfoList = findViewById(R.id.forthInfoList);
+
+                    ForthInfoAdapter forthInfoAdapter = new ForthInfoAdapter(MainActivity.this, R.layout.forth_info_item, records);
+
+                    forthInfoList.setAdapter(forthInfoAdapter);
                 }
             });
+
+            forthButton.setText(R.string.refresh_sym);
+
+            return null;
+        }
+    }
+
+    class VolgaBackUpdateAsyncTask extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            backButton.setText("...");
+        }
+
+        @Override
+        @RequiresApi(api = Build.VERSION_CODES.R)
+        protected String doInBackground(String... strings) {
+            final Map<String, Set<String>> BACK_STATIONS_INFO_MAP = Map.of("7795", Set.of("208", "56", "7"));
+
+            StationsInfoService stationsInfoService = new StationsInfoService();
+
+            final String API_URL = "https://api.merlin.tvercard.ru/api/client/v1/stations";
+
+            //piece of shit, need rewrite asap
+
+            List<ArrivalInfoResponse> backStationsInfo = new ArrayList<>();
+
+            for (String currentStation : BACK_STATIONS_INFO_MAP.keySet()) {
+
+                Request requestBackStation = new Request.Builder()
+                        .url(String.format("%s/%s/routes", API_URL, "7795"))
+                        .get()
+                        .build();
+
+                try {
+                    Response response = client.newCall(requestBackStation).execute();
+
+                    backStationsInfo.addAll(stationsInfoService.getInfo(response.body().string(), BACK_STATIONS_INFO_MAP.get(currentStation)));
+
+                } catch (IOException e) {
+                    backButton.setText("no internet");
+                    return null;
+                }
+            }
+
+            List<ArrivalInfoResponse> sortedBackStationsInfo = backStationsInfo.stream()
+                    .sorted(Comparator.comparingLong(ArrivalInfoResponse::getArrivalMinutes)).collect(Collectors.toList());
+
+            MainActivity.this.runOnUiThread(() -> {
+
+                if (!sortedBackStationsInfo.isEmpty()) {
+
+                    List<BusInfo> records = new ArrayList<>();
+
+                    sortedBackStationsInfo.forEach(info -> records.add(
+                            new BusInfo(info.getBusNumber(),
+                                    info.getArrivalMinutes() == Long.MAX_VALUE ? "прибывает/очень далеко"
+                                            : (sortedBackStationsInfo.get(0).getArrivalMinutes()) + " мин")));
+
+                    ListView backInfoList = findViewById(R.id.backInfoList);
+
+                    BackInfoAdapter backInfoAdapter = new BackInfoAdapter(MainActivity.this, R.layout.back_info_item, records);
+
+                    backInfoList.setAdapter(backInfoAdapter);
+                }
+            });
+
+            backButton.setText(R.string.refresh_sym);
 
             return null;
         }
