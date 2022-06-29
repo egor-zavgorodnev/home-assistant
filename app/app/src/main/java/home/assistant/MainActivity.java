@@ -30,6 +30,9 @@ import java.util.stream.Collectors;
 import home.assistant.model.BusInfo;
 import voda24.DataParser;
 import volga.StationsInfoService;
+import volga.data.InMemoryBackStorage;
+import volga.data.InMemoryForthStorage;
+import volga.data.Storage;
 import volga.model.ArrivalInfoResponse;
 
 
@@ -38,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     OkHttpClient client;
 
     TextView vodaBalance;
+    TextView backPreset;
+    TextView forthPreset;
 
     Button forthButton;
     Button backButton;
@@ -50,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         client = new OkHttpClient();
 
         vodaBalance = findViewById(R.id.voda_balance);
+        backPreset = findViewById(R.id.backPreset);
+        forthPreset = findViewById(R.id.forthPreset);
 
         forthButton = (Button) findViewById(R.id.forth_button);
         backButton = (Button) findViewById(R.id.back_button);
@@ -81,7 +88,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         @RequiresApi(api = Build.VERSION_CODES.R)
         protected String doInBackground(String... strings) {
-            final Map<String, Set<String>> FORTH_STATIONS_INFO_MAP = Map.of("8182", Set.of("208", "56"), "8183", Set.of("7"));
+            Storage storage = new InMemoryForthStorage();
+            final Map<String, Set<String>> FORTH_STATIONS_INFO_MAP = storage.getActivePreset().getStationAndBuses();
+            MainActivity.this.runOnUiThread(() -> forthPreset.setText("Preset: " + storage.getActivePreset().getName()));
 
             StationsInfoService stationsInfoService = new StationsInfoService();
 
@@ -145,7 +154,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         @RequiresApi(api = Build.VERSION_CODES.R)
         protected String doInBackground(String... strings) {
-            final Map<String, Set<String>> BACK_STATIONS_INFO_MAP = Map.of("7795", Set.of("208", "56", "7"));
+            Storage storage = new InMemoryBackStorage();
+            final Map<String, Set<String>> BACK_STATIONS_INFO_MAP = storage.getActivePreset().getStationAndBuses();
+            MainActivity.this.runOnUiThread(() -> backPreset.setText("Preset: " + storage.getActivePreset().getName()));
 
             StationsInfoService stationsInfoService = new StationsInfoService();
 
@@ -158,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
             for (String currentStation : BACK_STATIONS_INFO_MAP.keySet()) {
 
                 Request requestBackStation = new Request.Builder()
-                        .url(String.format("%s/%s/routes", API_URL, "7795"))
+                        .url(String.format("%s/%s/routes", API_URL, currentStation))
                         .get()
                         .build();
 

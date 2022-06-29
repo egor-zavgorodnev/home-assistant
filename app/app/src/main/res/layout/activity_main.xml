@@ -7,6 +7,18 @@
     android:background="#EAEEFF"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/backPreset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="468dp"
+        android:text="..."
+        android:textColor="@android:color/black"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/voda"
         android:layout_width="90dp"
@@ -144,6 +156,18 @@
         android:layout_height="204dp"
         android:layout_marginStart="27dp"
         android:layout_marginTop="511dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/forthPreset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="200dp"
+        android:text="..."
+        android:textColor="@android:color/black"
+        android:textSize="10sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
