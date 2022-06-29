@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     TextView vodaBalance;
     TextView backPreset;
     TextView forthPreset;
+    TextView version;
 
     Button forthButton;
     Button backButton;
@@ -51,15 +52,19 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.R)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         client = new OkHttpClient();
 
         vodaBalance = findViewById(R.id.voda_balance);
         backPreset = findViewById(R.id.backPreset);
         forthPreset = findViewById(R.id.forthPreset);
+        version = findViewById(R.id.version);
 
         forthButton = (Button) findViewById(R.id.forth_button);
         backButton = (Button) findViewById(R.id.back_button);
+
+        version.setText("v. " + BuildConfig.VERSION_NAME);
 
     }
 
