@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                     sortedForthStationsInfo.forEach(info -> records.add(
                             new BusInfo(info.getBusNumber(),
                                     info.getArrivalMinutes() == Long.MAX_VALUE ? "прибывает/очень далеко"
-                                            : (sortedForthStationsInfo.get(0).getArrivalMinutes()) + " мин")));
+                                            : (info.getArrivalMinutes()) + " мин")));
 
                     ListView forthInfoList = findViewById(R.id.forthInfoList);
 
@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
 
             final String API_URL = "https://api.merlin.tvercard.ru/api/client/v1/stations";
 
-            //piece of shit, need rewrite asap
+            //piece of shit
 
             List<ArrivalInfoResponse> backStationsInfo = new ArrayList<>();
 
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
                     sortedBackStationsInfo.forEach(info -> records.add(
                             new BusInfo(info.getBusNumber(),
                                     info.getArrivalMinutes() == Long.MAX_VALUE ? "прибывает/очень далеко"
-                                            : (sortedBackStationsInfo.get(0).getArrivalMinutes()) + " мин")));
+                                            : (info.getArrivalMinutes()) + " мин")));
 
                     ListView backInfoList = findViewById(R.id.backInfoList);
 
