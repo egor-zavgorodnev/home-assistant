@@ -19,10 +19,9 @@ public class InMemoryBackStorage implements Storage {
 
     public InMemoryBackStorage() {
         currentPresets = List.of(
-                new Preset("gym12", Map.of("7795", Set.of("208", "56", "7"))),
-                new Preset("river", Map.of("8220", Set.of("208", "56", "7", "55", "6")))
+                new Preset("swimmingpool", Map.of("12407", Set.of("7"), "12392", Set.of("55")))
         );
-        activePreset = getPresetByName("gym12");
+        activePreset = getPresetByName("swimmingpool");
     }
 
     @Override

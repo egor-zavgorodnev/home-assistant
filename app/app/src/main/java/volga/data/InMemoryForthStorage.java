@@ -19,7 +19,7 @@ public class InMemoryForthStorage implements Storage {
 
     public InMemoryForthStorage() {
         currentPresets = List.of(
-                new Preset("home", Map.of("8182", Set.of("208", "56"), "8183", Set.of("7"))
+                new Preset("home", Map.of("12388", Set.of("7"))
                 ));
         activePreset = getPresetByName("home");
     }
