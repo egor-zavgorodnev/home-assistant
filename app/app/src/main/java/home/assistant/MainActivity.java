@@ -1,6 +1,8 @@
 package home.assistant;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,9 +46,15 @@ public class MainActivity extends AppCompatActivity {
     TextView backPreset;
     TextView forthPreset;
     TextView version;
+    TextView vodaBuyErrorText;
 
     Button forthButton;
     Button backButton;
+    Button voda60rubButton;
+    Button voda90rubButton;
+    Button voda120rubButton;
+
+    String voda24LoginCookie;
 
     @Override
     @RequiresApi(api = Build.VERSION_CODES.R)
@@ -60,9 +68,13 @@ public class MainActivity extends AppCompatActivity {
         backPreset = findViewById(R.id.backPreset);
         forthPreset = findViewById(R.id.forthPreset);
         version = findViewById(R.id.version);
+        vodaBuyErrorText = findViewById(R.id.voda_buy_error_text);
 
         forthButton = (Button) findViewById(R.id.forth_button);
         backButton = (Button) findViewById(R.id.back_button);
+        voda60rubButton = (Button) findViewById(R.id.voda24_60rub);
+        voda90rubButton = (Button) findViewById(R.id.voda24_90rub);
+        voda120rubButton = (Button) findViewById(R.id.voda24_120rub);
 
         version.setText("v. " + BuildConfig.VERSION_NAME);
 
@@ -257,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Response response) throws IOException {
                     final String accountInfo = response.body().string();
+                    voda24LoginCookie = response.headers().get("Set-Cookie");
                     MainActivity.this.runOnUiThread(() -> {
                         vodaBalance.setText(String.valueOf(DataParser.getBalanceFromJson(accountInfo)));
                     });
@@ -264,12 +277,85 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+
+
+            return null;
+        }
+    }
+
+    class VodaBuyAsyncTask extends AsyncTask<String, String, String> {
+
+        private final Integer price;
+        private final Button button;
+
+        public VodaBuyAsyncTask(Integer price, Button button) {
+            super();
+            this.price = price;
+            this.button = button;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            button.setText("...");
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            final String API_URL = "https://xn--24-6kchk3d.xn--p1acf/api/initPay";
+
+            RequestBody body = new MultipartBuilder()
+                    .type(MultipartBuilder.FORM)
+                    .addFormDataPart("amount", String.valueOf(price))
+                    .build();
+
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .header("Cookie", voda24LoginCookie)
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+                    MainActivity.this.runOnUiThread(() -> vodaBuyErrorText.setText("Ошибка"));
+                }
+
+                @Override
+                public void onResponse(Response response) throws IOException {
+                    final String urlInfo = response.body().string();
+                    String formUrlFromJson = DataParser.getFormUrlFromJson(urlInfo);
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(formUrlFromJson));
+                    startActivity(browserIntent);
+                    voda24LoginCookie = response.headers().get("Set-Cookie");
+                    MainActivity.this.runOnUiThread(() -> {
+                        button.setText(price + " ₽");
+                        vodaBuyErrorText.setText("");
+                    });
+                }
+            });
+
+
+
             return null;
         }
     }
 
     public void updateVodaBalance(View view) throws IOException {
         new VodaUpdateAsyncTask().execute();
+    }
+
+    public void buyVoda60rub(View view) {
+        new VodaBuyAsyncTask(60, voda60rubButton).execute();
+    }
+
+    public void buyVoda90rub(View view) {
+        new VodaBuyAsyncTask(90, voda90rubButton).execute();
+    }
+
+    public void buyVoda120rub(View view) {
+        new VodaBuyAsyncTask(120, voda120rubButton).execute();
     }
 
 }
