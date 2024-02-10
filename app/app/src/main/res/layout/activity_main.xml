@@ -8,6 +8,21 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/bottlesCount"
+        android:layout_width="115dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="164dp"
+        android:fontFamily="@font/centurygothic"
+        android:text="Количество бочков"
+        android:textAppearance="@null"
+        android:textColor="#232323"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/voda_buy_error_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,30 +43,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/voda24_120rub"
+        android:id="@+id/vodaPay"
         style="@null"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="284dp"
-        android:layout_marginTop="168dp"
+        android:layout_marginTop="164dp"
         android:background="@drawable/transparent_btn"
-        android:onClick="buyVoda120rub"
-        android:text="120 ₽"
+        android:onClick="buyVoda"
+        android:text="Оплатить"
         android:textColor="#6A92D4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/voda24_60rub"
-        style="@null"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="168dp"
-        android:background="@drawable/transparent_btn"
-        android:onClick="buyVoda60rub"
-        android:text="60 ₽"
-        android:textColor="#6A92D4"
+        android:textSize="10sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -107,20 +109,6 @@
         android:text="@string/rub_sym"
         android:textColor="#232323"
         android:textSize="34sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/voda24_90rub"
-        style="@null"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:layout_marginTop="168dp"
-        android:background="@drawable/transparent_btn"
-        android:onClick="buyVoda90rub"
-        android:text="90 ₽"
-        android:textColor="#6A92D4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -236,6 +224,18 @@
         android:textColor="#232323"
         android:textSize="24sp"
         android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="98dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="176dp"
+        android:layout_marginTop="156dp"
+        android:entries="@array/vodaDropdownElements"
+        android:popupBackground="@android:color/white"
+        android:backgroundTint="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

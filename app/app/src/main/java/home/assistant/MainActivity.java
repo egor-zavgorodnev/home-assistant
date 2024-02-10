@@ -7,8 +7,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -40,6 +42,8 @@ import volga.model.ArrivalInfoResponse;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int BOTTLE_AMOUNT = 30;
+
     OkHttpClient client;
 
     TextView vodaBalance;
@@ -50,11 +54,14 @@ public class MainActivity extends AppCompatActivity {
 
     Button forthButton;
     Button backButton;
-    Button voda60rubButton;
-    Button voda90rubButton;
-    Button voda120rubButton;
+
+    Button vodaPayButton;
 
     String voda24LoginCookie;
+
+    Spinner vodaSpinner;
+
+    final List<String> bottlesCountList = List.of("4", "5", "6", "7", "8", "9");
 
     @Override
     @RequiresApi(api = Build.VERSION_CODES.R)
@@ -72,9 +79,14 @@ public class MainActivity extends AppCompatActivity {
 
         forthButton = (Button) findViewById(R.id.forth_button);
         backButton = (Button) findViewById(R.id.back_button);
-        voda60rubButton = (Button) findViewById(R.id.voda24_60rub);
-        voda90rubButton = (Button) findViewById(R.id.voda24_90rub);
-        voda120rubButton = (Button) findViewById(R.id.voda24_120rub);
+        vodaPayButton = (Button) findViewById(R.id.vodaPay);
+
+        vodaSpinner = findViewById(R.id.spinner);
+
+        ArrayAdapter<String> vodaSpinnerAdapter = new ArrayAdapter<>(this, R.layout.spinner_list, bottlesCountList);
+        vodaSpinnerAdapter.setDropDownViewResource(R.layout.spinner_list);
+
+        vodaSpinner.setAdapter(vodaSpinnerAdapter);
 
         version.setText("v. " + BuildConfig.VERSION_NAME);
 
@@ -278,7 +290,6 @@ public class MainActivity extends AppCompatActivity {
             });
 
 
-
             return null;
         }
     }
@@ -330,12 +341,11 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(browserIntent);
                     voda24LoginCookie = response.headers().get("Set-Cookie");
                     MainActivity.this.runOnUiThread(() -> {
-                        button.setText(price + " ₽");
+                        button.setText("Оплатить");
                         vodaBuyErrorText.setText("");
                     });
                 }
             });
-
 
 
             return null;
@@ -346,16 +356,9 @@ public class MainActivity extends AppCompatActivity {
         new VodaUpdateAsyncTask().execute();
     }
 
-    public void buyVoda60rub(View view) {
-        new VodaBuyAsyncTask(60, voda60rubButton).execute();
-    }
-
-    public void buyVoda90rub(View view) {
-        new VodaBuyAsyncTask(90, voda90rubButton).execute();
-    }
-
-    public void buyVoda120rub(View view) {
-        new VodaBuyAsyncTask(120, voda120rubButton).execute();
+    public void buyVoda(View view) {
+        Integer bottleCount = Integer.valueOf(vodaSpinner.getSelectedItem().toString());
+        new VodaBuyAsyncTask(bottleCount * BOTTLE_AMOUNT, vodaPayButton).execute();
     }
 
 }
