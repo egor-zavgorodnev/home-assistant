@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EAEEFF"
+    tools:context=".Settings">
+
+    <Button
+        android:id="@+id/settings_save"
+        style="@null"
+        android:layout_width="100dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="272dp"
+        android:background="@drawable/transparent_btn"
+        android:onClick="saveSettings"
+        android:text="Сохранить"
+        android:textColor="#6A92D4"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/bottlePrice"
+        android:layout_width="115dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="68dp"
+        android:fontFamily="@font/centurygothic"
+        android:text="@string/bottlePrice"
+        android:textAppearance="@null"
+        android:textColor="#232323"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/bottle_price_input"
+        android:layout_width="73dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="242dp"
+        android:layout_marginTop="72dp"
+        android:background="@android:color/background_light"
+        android:digits="0123456789"
+        android:maxLength="10"
+        android:text="35"
+        android:textAlignment="center"
+        android:textColor="#6A92D4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/save_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="194dp"
+        android:layout_marginTop="340dp"
+        android:textColor="#6A92D4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

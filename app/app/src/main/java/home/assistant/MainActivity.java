@@ -1,6 +1,9 @@
 package home.assistant;
 
 
+import static voda24.DbHelper.createDbIfNotExists;
+import static voda24.DbHelper.getActualValue;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -9,7 +12,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -24,36 +26,20 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import home.assistant.model.BusInfo;
 import voda24.DataParser;
-import volga.StationsInfoService;
-import volga.data.InMemoryBackStorage;
-import volga.data.InMemoryForthStorage;
-import volga.data.Storage;
-import volga.model.ArrivalInfoResponse;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int BOTTLE_AMOUNT = 30;
 
     OkHttpClient client;
 
     TextView vodaBalance;
-    TextView backPreset;
-    TextView forthPreset;
+
     TextView version;
     TextView vodaBuyErrorText;
-
-    Button forthButton;
-    Button backButton;
 
     Button vodaPayButton;
 
@@ -67,19 +53,16 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.R)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        createDbIfNotExists(getBaseContext());
 
         setContentView(R.layout.activity_main);
         client = new OkHttpClient();
 
         vodaBalance = findViewById(R.id.voda_balance);
-        backPreset = findViewById(R.id.backPreset);
-        forthPreset = findViewById(R.id.forthPreset);
         version = findViewById(R.id.version);
         vodaBuyErrorText = findViewById(R.id.voda_buy_error_text);
 
-        forthButton = (Button) findViewById(R.id.forth_button);
-        backButton = (Button) findViewById(R.id.back_button);
-        vodaPayButton = (Button) findViewById(R.id.vodaPay);
+        vodaPayButton = findViewById(R.id.vodaPay);
 
         vodaSpinner = findViewById(R.id.spinner);
 
@@ -99,155 +82,12 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             updateVodaBalance(null);
-            updateVolgaForthInfo(null);
-            updateVolgaBackInfo(null);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    class VolgaForthUpdateAsyncTask extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            forthButton.setText("...");
-        }
-
-        @Override
-        @RequiresApi(api = Build.VERSION_CODES.R)
-        protected String doInBackground(String... strings) {
-            Storage storage = new InMemoryForthStorage();
-            final Map<String, Set<String>> FORTH_STATIONS_INFO_MAP = storage.getActivePreset().getStationAndBuses();
-            MainActivity.this.runOnUiThread(() -> forthPreset.setText("Preset: " + storage.getActivePreset().getName()));
-
-            StationsInfoService stationsInfoService = new StationsInfoService();
-
-            final String API_URL = "https://api.merlin.tvercard.ru/api/client/v1/stations";
-
-            List<ArrivalInfoResponse> forthStationsInfo = new ArrayList<>();
-
-            for (String currentStation : FORTH_STATIONS_INFO_MAP.keySet()) {
-                Request requestForthStation = new Request.Builder()
-                        .url(String.format("%s/%s/routes", API_URL, currentStation))
-                        .get()
-                        .build();
-
-                try {
-                    Response response = client.newCall(requestForthStation).execute();
-
-                    forthStationsInfo.addAll(stationsInfoService.getInfo(response.body().string(), FORTH_STATIONS_INFO_MAP.get(currentStation)));
-
-                } catch (IOException e) {
-                    forthButton.setText("no internet");
-                    return null;
-                }
-
-            }
-
-            List<ArrivalInfoResponse> sortedForthStationsInfo = forthStationsInfo.stream()
-                    .sorted(Comparator.comparingLong(ArrivalInfoResponse::getArrivalMinutes)).collect(Collectors.toList());
-
-            MainActivity.this.runOnUiThread(() -> {
-
-                if (!sortedForthStationsInfo.isEmpty()) {
-
-                    List<BusInfo> records = new ArrayList<>();
-
-                    sortedForthStationsInfo.forEach(info -> records.add(
-                            new BusInfo(info.getBusNumber(),
-                                    info.getArrivalMinutes() == Long.MAX_VALUE ? "прибывает/очень далеко"
-                                            : (info.getArrivalMinutes()) + " мин")));
-
-                    ListView forthInfoList = findViewById(R.id.forthInfoList);
-
-                    ForthInfoAdapter forthInfoAdapter = new ForthInfoAdapter(MainActivity.this, R.layout.forth_info_item, records);
-
-                    forthInfoList.setAdapter(forthInfoAdapter);
-                }
-            });
-
-            forthButton.setText(R.string.refresh_sym);
-
-            return null;
-        }
-    }
-
-    class VolgaBackUpdateAsyncTask extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            backButton.setText("...");
-        }
-
-        @Override
-        @RequiresApi(api = Build.VERSION_CODES.R)
-        protected String doInBackground(String... strings) {
-            Storage storage = new InMemoryBackStorage();
-            final Map<String, Set<String>> BACK_STATIONS_INFO_MAP = storage.getActivePreset().getStationAndBuses();
-            MainActivity.this.runOnUiThread(() -> backPreset.setText("Preset: " + storage.getActivePreset().getName()));
-
-            StationsInfoService stationsInfoService = new StationsInfoService();
-
-            final String API_URL = "https://api.merlin.tvercard.ru/api/client/v1/stations";
-
-            //piece of shit
-
-            List<ArrivalInfoResponse> backStationsInfo = new ArrayList<>();
-
-            for (String currentStation : BACK_STATIONS_INFO_MAP.keySet()) {
-
-                Request requestBackStation = new Request.Builder()
-                        .url(String.format("%s/%s/routes", API_URL, currentStation))
-                        .get()
-                        .build();
-
-                try {
-                    Response response = client.newCall(requestBackStation).execute();
-
-                    backStationsInfo.addAll(stationsInfoService.getInfo(response.body().string(), BACK_STATIONS_INFO_MAP.get(currentStation)));
-
-                } catch (IOException e) {
-                    backButton.setText("no internet");
-                    return null;
-                }
-            }
-
-            List<ArrivalInfoResponse> sortedBackStationsInfo = backStationsInfo.stream()
-                    .sorted(Comparator.comparingLong(ArrivalInfoResponse::getArrivalMinutes)).collect(Collectors.toList());
-
-            MainActivity.this.runOnUiThread(() -> {
-
-                if (!sortedBackStationsInfo.isEmpty()) {
-
-                    List<BusInfo> records = new ArrayList<>();
-
-                    sortedBackStationsInfo.forEach(info -> records.add(
-                            new BusInfo(info.getBusNumber(),
-                                    info.getArrivalMinutes() == Long.MAX_VALUE ? "прибывает/очень далеко"
-                                            : (info.getArrivalMinutes()) + " мин")));
-
-                    ListView backInfoList = findViewById(R.id.backInfoList);
-
-                    BackInfoAdapter backInfoAdapter = new BackInfoAdapter(MainActivity.this, R.layout.back_info_item, records);
-
-                    backInfoList.setAdapter(backInfoAdapter);
-                }
-            });
-
-            backButton.setText(R.string.refresh_sym);
-
-            return null;
-        }
-    }
-
-    public void updateVolgaForthInfo(View view) {
-        new VolgaForthUpdateAsyncTask().execute();
-    }
-
-    public void updateVolgaBackInfo(View view) {
-        new VolgaBackUpdateAsyncTask().execute();
-    }
 
     class VodaUpdateAsyncTask extends AsyncTask<String, String, String> {
         @Override
@@ -357,8 +197,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void buyVoda(View view) {
+        Integer BOTTLE_AMOUNT = getActualValue(getBaseContext());
         Integer bottleCount = Integer.valueOf(vodaSpinner.getSelectedItem().toString());
         new VodaBuyAsyncTask(bottleCount * BOTTLE_AMOUNT, vodaPayButton).execute();
     }
 
+    public void openSettings(View view) {
+        Intent intent = new Intent(this, Settings.class);
+        startActivity(intent);
+    }
 }

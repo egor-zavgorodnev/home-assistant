@@ -8,51 +8,12 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/bottlesCount"
-        android:layout_width="115dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="164dp"
-        android:fontFamily="@font/centurygothic"
-        android:text="Количество бочков"
-        android:textAppearance="@null"
-        android:textColor="#232323"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/voda_buy_error_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="176dp"
-        android:layout_marginTop="232dp"
+        android:layout_marginStart="180dp"
+        android:layout_marginTop="460dp"
         android:textColor="@android:color/holo_red_light"
-        android:textSize="10sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ListView
-        android:id="@+id/forthInfoList"
-        android:layout_width="345dp"
-        android:layout_height="191dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="316dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/vodaPay"
-        style="@null"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="284dp"
-        android:layout_marginTop="164dp"
-        android:background="@drawable/transparent_btn"
-        android:onClick="buyVoda"
-        android:text="Оплатить"
-        android:textColor="#6A92D4"
         android:textSize="10sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -63,7 +24,7 @@
         android:layout_width="169dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="156dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="192dp"
         android:layout_marginEnd="35dp"
         android:background="@drawable/btn"
         android:onClick="updateVodaBalance"
@@ -74,16 +35,45 @@
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.98"
+        app:layout_constraintHorizontal_bias="0.607"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ListView
-        android:id="@+id/backInfoList"
-        android:layout_width="346dp"
-        android:layout_height="204dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="580dp"
+    <ImageView
+        android:id="@+id/voda"
+        android:layout_width="90dp"
+        android:layout_height="95dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="140dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/voda" />
+
+    <TextView
+        android:id="@+id/ruble_sign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="268dp"
+        android:layout_marginTop="132dp"
+        android:fontFamily="@font/centurygothic_bold"
+        android:text="@string/rub_sym"
+        android:textColor="#232323"
+        android:textSize="34sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/voda_balance"
+        style="@null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="204dp"
+        android:layout_marginTop="132dp"
+        android:fontFamily="@font/centurygothic_bold"
+        android:text="124"
+        android:textColor="#232323"
+        android:textSize="34sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -99,143 +89,60 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/ruble_sign"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="284dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/centurygothic_bold"
-        android:text="@string/rub_sym"
-        android:textColor="#232323"
-        android:textSize="34sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/forth_button"
-        style="@null"
-        android:layout_width="127dp"
-        android:layout_height="33dp"
-        android:layout_marginStart="240dp"
-        android:layout_marginTop="264dp"
-        android:background="@drawable/btn"
-        android:gravity="center"
-        android:onClick="updateVolgaForthInfo"
-        android:paddingBottom="7dp"
-        android:text="@string/refresh_sym"
-        android:textAppearance="@null"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/back_button"
-        style="@null"
-        android:layout_width="127dp"
-        android:layout_height="33dp"
-        android:layout_marginStart="240dp"
-        android:layout_marginTop="532dp"
-        android:background="@drawable/btn"
-        android:gravity="center"
-        android:onClick="updateVolgaBackInfo"
-        android:paddingBottom="7dp"
-        android:text="@string/refresh_sym"
-        android:textAppearance="@null"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/forthPreset"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="112dp"
-        android:layout_marginTop="272dp"
-        android:text="..."
-        android:textColor="@android:color/black"
-        android:textSize="10sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/backPreset"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="128dp"
-        android:layout_marginTop="540dp"
-        android:text="..."
-        android:textColor="@android:color/black"
-        android:textSize="10sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/voda"
-        android:layout_width="90dp"
-        android:layout_height="95dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/voda" />
-
-    <TextView
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="532dp"
-        android:fontFamily="@font/centurygothic"
-        android:text="Назад"
-        android:textAppearance="@null"
-        android:textColor="#232323"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/voda_balance"
-        style="@null"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="220dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/centurygothic_bold"
-        android:text="124"
-        android:textColor="#232323"
-        android:textSize="34sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/forth"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="264dp"
-        android:fontFamily="@font/centurygothic"
-        android:text="Туда"
-        android:textAppearance="@null"
-        android:textColor="#232323"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="98dp"
         android:layout_height="58dp"
-        android:layout_marginStart="176dp"
-        android:layout_marginTop="156dp"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="372dp"
+        android:backgroundTint="@android:color/black"
         android:entries="@array/vodaDropdownElements"
         android:popupBackground="@android:color/white"
-        android:backgroundTint="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/vodaPay"
+        style="@null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="268dp"
+        android:layout_marginTop="380dp"
+        android:background="@drawable/transparent_btn"
+        android:onClick="buyVoda"
+        android:text="Оплатить"
+        android:textColor="#6A92D4"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/bottlesCount"
+        android:layout_width="115dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="380dp"
+        android:fontFamily="@font/centurygothic"
+        android:text="@string/bottlesCount"
+        android:textAppearance="@null"
+        android:textColor="#232323"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/settings"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="356dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/selectableItemBackground"
+        android:onClick="openSettings"
+        android:paddingBottom="0dp"
+        android:text="@string/settings"
+        android:textAlignment="center"
+        android:textSize="30dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

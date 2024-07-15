@@ -2,6 +2,9 @@
     <string name="app_name">Home Assistant</string>
     <string name="refresh_sym">⟳</string>
     <string name="rub_sym">₽</string>
+    <string name="bottlePrice">Стоимость бочка (5л)</string>
+    <string name="bottlesCount">Количество бочков</string>
+    <string name="settings">⚙️</string>
 
     <string-array name="vodaDropdownElements">
         <item>4</item>
