@@ -33,12 +33,12 @@ import voda24.DataParser;
 
 public class MainActivity extends AppCompatActivity {
 
-
     OkHttpClient client;
 
     TextView vodaBalance;
 
     TextView version;
+
     TextView vodaBuyErrorText;
 
     Button vodaPayButton;
@@ -154,11 +154,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
 
-            final String API_URL = "https://xn--24-6kchk3d.xn--p1acf/api/initPay";
+            final String API_URL = "https://xn--24-6kchk3d.xn--p1acf/api/initPayYooMoney";
 
             RequestBody body = new MultipartBuilder()
                     .type(MultipartBuilder.FORM)
                     .addFormDataPart("amount", String.valueOf(price))
+                    .addFormDataPart("phone", "+7 (910) 531-18-15")
+                    .addFormDataPart("force", "false")
                     .build();
 
             Request request = new Request.Builder()
